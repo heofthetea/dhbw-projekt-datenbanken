@@ -11,6 +11,8 @@
 % \addbibresource{paper.bib}
 
 \usepackage{listings}
+\usepackage{rotating}
+\usepackage{pdflscape}
 
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \linespread{1.5}
@@ -19,13 +21,9 @@
 % so just doing backref does not work, but backref=true works
 % fyi this makes \ref commands clickable
 \usepackage[hidelinks, backref=true]{hyperref} 
-
 \usepackage[nonumberlist,automake=immediate,toc]{glossaries}
 
 \makeglossaries
-
-
-
 \newcommand{\projektname}{Modellierung eines Ticketsystems}
 \newcommand{\autor}{Emil Schläger}
 \newcommand{\matrikelnummer}{2988631}
@@ -49,6 +47,11 @@
 	% \textbf{Matrikelnummer}\hfill \matrikelnummer{}
 	\textbf{Kurs:}\hfill INF23B
 	
+
+	\newpage
+	\tableofcontents
+	\newpage
+	\listoffigures
 	
 	
 	\newpage
@@ -61,8 +64,19 @@ Auf einer Tour spielt immer mindestens ein Künstler. Oft bringt der Künstler a
 Die Plattform soll auch die Finanzen einer Tour verwalten können, da die Bezahlung der Tickets bei der Plattform landet.  Organisiert also ein Veranstalter eine Tour für einen Künstler, entsteht dabei ein weiterer Vertrag, der vereinbart, wie viel Prozent der Umsätze der Tour an den Veranstalter gehen. Der Umsatz einer Tour errechnet sich ganz einfach aus der Summe der Preise aller verkauften Tickets. Auch die Plattenlabel verdienen an den Tickets mit. Dieser Festbetrag errechnet sich wie folgt: Bei Veröffentlichung eines Albums $A$ über Label $L$ wird ein Betrag festgelegt, der an das Label gezahlt wird, jedes mal wenn der Künstler einen Song $s \in A$ spielt. Am Ende einer Tour kann also mithilfe der Setlist der Künstler und der Anzahl an Events ausgerechnet werden, wie viel an das Label gezahlt werden muss.\\
 Da Künstler, Veranstalter und Label jeweils Zugang auf die Plattform haben müssen, um die für sie relevanten Daten zu verwalten, muss jedem indivuduellen Künstler, Veranstalter oder label ein User Account zugeordnet werden. Damit die Plattform entscheiden kann, welche Zugriffsrechte ein einzelner User hat, wird jedem Account eine entsprechende Rolle zugeordnet.
 
-\section{Entity Relationship Model}
-\textit{[INSERT BILD]}
+\newpage
+\global\pdfpageattr\expandafter{\the\pdfpageattr/Rotate 90}
+\begin{sidewaysfigure}
+\section{Konzeptioneller Entwurf}
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{img/erm.png}
+		\caption{Entity Relationship Model}
+		\label{fig:erm}
+	\end{figure}
+\end{sidewaysfigure}
+
 
 
 \end{document}
