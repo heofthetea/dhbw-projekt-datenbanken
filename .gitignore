@@ -1,0 +1,21 @@
+!.vscode 
+# holy shit why does latex produce a quadrillion intermediate files that do nothing but cause errors somewhere 
+*.bbl 
+*.blg 
+*.aux 
+*.gls 
+*.glo 
+*.glg 
+*.glsdefs 
+*.ist 
+*.acn 
+*.log 
+*.out 
+*.xml 
+*.bcf 
+*.toc 
+*.fdb_latexmk 
+*.fls 
+*.lof 
+*.synctex.gz 
+*.synctex(busy)
