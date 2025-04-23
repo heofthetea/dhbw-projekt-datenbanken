@@ -6,13 +6,18 @@
 
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage[normalem]{ulem}
+\usepackage{amssymb}
 
 \usepackage[backend=biber, style=ieee]{biblatex}
 % \addbibresource{paper.bib}
 
+
+
 \usepackage{listings}
 \usepackage{rotating}
 \usepackage{pdflscape}
+\usepackage{adjustbox}
 
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \linespread{1.5}
@@ -27,8 +32,8 @@
 \newcommand{\projektname}{Modellierung eines Ticketsystems}
 \newcommand{\autor}{Emil Schläger}
 \newcommand{\matrikelnummer}{2988631}
-\newcommand{\betreuer}{Frithard Meyer zu Uptrup}
-
+\newcommand{\set}[1]{\{#1\}} % HOLY SHIT LATEX WHAT THE FUCK ARE YOU DOING
+\newcommand{\relation}[2]{$$\text{{#1}: } \set{[{#2}]}$$}
 
 %% Define custom commands END!
 
@@ -65,18 +70,87 @@ Die Plattform soll auch die Finanzen einer Tour verwalten können, da die Bezahl
 Da Künstler, Veranstalter und Label jeweils Zugang auf die Plattform haben müssen, um die für sie relevanten Daten zu verwalten, muss jedem indivuduellen Künstler, Veranstalter oder label ein User Account zugeordnet werden. Damit die Plattform entscheiden kann, welche Zugriffsrechte ein einzelner User hat, wird jedem Account eine entsprechende Rolle zugeordnet.
 
 \newpage
-\global\pdfpageattr\expandafter{\the\pdfpageattr/Rotate 90}
-\begin{sidewaysfigure}
 \section{Konzeptioneller Entwurf}
-	
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\textwidth]{img/erm.png}
-		\caption{Entity Relationship Model}
-		\label{fig:erm}
-	\end{figure}
-\end{sidewaysfigure}
+\vspace*{\fill}
+\begin{adjustbox}{angle=90,center,caption=Entity Relationship Model,nofloat=figure}
+	\includegraphics[width=1.4\textwidth]{img/erm_corrected_again.png}
+	\label{fig:erm}
+\end{adjustbox}
 
 
 
+
+
+\newpage
+\section{Logischer Entwurf}
+\subsection{Relationales Modell}
+
+\relation{User}{{\underline{User\_ID}},\ First\_Name,\ Last\_Name,\ Email,\ Phone\_Number}
+\relation{Ticket}{\underline{Ticket\_Nr},\ Price,\ Seat\_Nr,\ \dashuline{User\_ID},\ \dashuline{Event\_ID}}
+\relation{Event}{\underline{Event\_ID},\ Begin,\ Doors,\ Date,\ \dashuline{Venue\_ID}, \dashuline{Tour\_ID}}
+\relation{Venue}{\underline{Venue\_ID},\ Name,\ \dashuline{Address},\ Capacity\_Standing,\ Capacity\_Seated}
+\relation{Tour}{\underline{Tour\_ID},\ Name,\ \dashuline{Organizer\_ID},\ Percentage}
+\relation{Artist}{\underline{Artist\_ID},\ Name,\ Genre,\ \dashuline{Label\_Name},\ Contract\_End,\ \dashuline{User\_ID}}
+\relation{Setlist}{\underline{Setlist\_ID}}
+\relation{Plays\_In}{\dashuline{\underline{Artist\_ID}},\ \dashuline{\underline{Tour\_ID}}, \dashuline{\underline{Setlist\_ID}},\ Position}
+\relation{Song}{\underline{Song\_ID},\ \dashuline{\underline{Album\_ID}},\ Name,\ \dashuline{Setlist\_ID}}
+\relation{Album}{\underline{Album\_ID},\ Name,\ Released, Label\_Name}
+\relation{Label}{\underline{Name},\ \dashuline{Address},\ \dashuline{User\_ID}}
+\relation{Releases}{\dashuline{\underline{Artist\_ID}},\ \dashuline{\underline{Album\_ID}}, \dashuline{{Label\_Name}}, Label\_Fee}
+\relation{Organizer}{\underline{Name},\ \dashuline{Address},\ \dashuline{User\_ID}}
+\relation{Address}{\underline{Address\_ID},\ Country,\ City,\ Postal\_Code,\ Street,\ House\_Number}
+
+
+\subsection{Exemplarisches Prüfen auf 3NF}
+% Die Relation \textit{Address} ist aufgrund der Normalisierung in 3NF neu entstanden. Hier wird formal aufgezeigt, wie diese Notwendigkeit zustande kommt.
+
+% Im ERM (\ref{fig:erm}) ist zu sehen,dass die Entität \textit{Venue} ein Attribut \textit{Adresse} besitzt. Ein solches Attribut ist aber nicht atomar, da sich eine Adresse aus mehreren Bestandteilen zusammensetzt. Da als Resultat eine Relation mit diesem Attribut nicht einmal in der 1. Normalform wäre, muss hier normalisiert werden.
+
+% \subsubsection{1NF}
+% Um \textit{Venue} in 1NF zu bringen, muss das Attribut \textit{Adresse} in seine Bestandteile zerlegt werden. Damit sieht die Relation \textit{Venue} nun wie folgt aus:
+% \begin{align*}
+% 	\text{Venue: } \set{\underline{Venue\_ID},\ Name,\ Capacity\_Standing,\ Capacity\_Seated,\\
+% 	Country,\ City,\ Postal\_Code,\ Street,\ House\_Number}
+% \end{align*}
+
+% \subsubsection{2NF}
+
+
+Hier wird am Beispiel der Relation \textit{Venue} gezeigt, dass diese in der 3. Normalform ist.
+Hierfür müssen zunächst 1NF und 2NF geprüft werden:
+\begin{itemize}
+	\item 1NF: Alle Attribute sind so konzipiert, dass sie nur einen wert enthalten, also atomar sind. Dadurch ist die Relation in 1NF.
+	\item 2NF: Der Primärschlüssel der Relation, $\set{Venue\_ID}$, enthält nur ein Element. Dadurch kann es keine funktionalen Abhängigkeiten von einem Teil des Schlüssels geben. Dadurch ist die Relation in 2NF.
+\end{itemize}
+
+Um zu prüfen, ob die Relation in 3NF ist, müssen zuerst alle existierenden funktionalen Abhängigkeiten innerhalb der Relation bestimmt werden:
+$$F = \begin{cases}Venue\_ID \rightarrow [Venue] \\ Name,\ Address \rightarrow [Venue]\end{cases}$$
+
+
+Dadurch ergeben sich zwei Schlüsselkandidaten: $\set{Venue\_ID}$ und \smallskip $\set{Name,\ Address}$. Anhand der folgenden Tabelle werden alle funktionalen Abhängigkeiten der Form $$X \rightarrow \alpha$$ untersucht:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+X & $\alpha$ & $X$ ist Superschlüssel & $\alpha$ ist prim \\ \hline
+Venue\_ID & Name & \checkmark & \text{\sffamily X} \\ \hline
+ & Address & \checkmark & \checkmark \\ \hline
+ & Name & \checkmark & \checkmark  \\ \hline
+ & Capacity\_Seated & \checkmark & \text{\sffamily X} \\ \hline
+ & Capacity\_Standing & \checkmark & \text{\sffamily X} \\ \hline
+Name, Address & Venue\_ID & \checkmark & \checkmark \\ \hline
+ & Capacity\_Seated & \checkmark & \text{\sffamily X} \\ \hline
+ & Capacity\_Standing & \checkmark & \text{\sffamily X} \\ \hline
+\end{tabular}
+\caption{3NF Prüfung für Ticket}
+\label{tab:example}
+\end{table}
+
+Da für jede Funktionale Abhhängigkeit $f \in F$ gilt, dass die Domäne von $f$ ein Superschlüssel ist, oder die Bildmenge ein Primattribut, ist die Relation in 3NF.
 \end{document}
+
+
+
+\section{Datenbankschema}
+
