@@ -151,9 +151,22 @@ Da für jede Funktionale Abhhängigkeit $f \in F$ gilt, dass die Domäne von $f$
 
 \newpage
 \section{Datenbankschema}
-Korrekturen, die für diesen Teil am ERM vorgenommen wurden:
+Korrekturen, die für diesen Teil an der Modellierung vorgenommen wurden:
 \begin{itemize}
 	\item Beziehung "Song kombiniert zu Setlist" wurde von einer 1-N Beziehung in eine N-M Beziehung transformiert. Dies ist ein Ergebnis dessen, dass Löschregeln sonst semantisch nicht sinnvol definiert werden könnten.
 \end{itemize}
+
+\subsection{Keine Cascade Zyklen}
+Hier wird gezeigt, dass es keine Zyklen aus Löschregeln gibt, die zu ungewolltem Datenverlust führen könnten. Hierfür wird in einer Tiefensuche jeder \texttt{on delete cascade} foreign key constraints überprüft, was passieren würde, wenn er ausgelöst würde. Die benutzte Darstellung ist wie folgt zu lesen: "Tabelle, in der ursprünglich gelöscht wird" $\rightarrow$ "Tabelle, in der dies zu einer Cascade führt".
+
+\begin{enumerate}
+	\item \texttt{event} $\rightarrow$ \texttt{ticket}: \texttt{ticket} wird von keiner weiteren Tabelle referenziert.
+	\item \texttt{artist, tour, setlist} $\rightarrow$ \texttt{plays\_in}: \texttt{plays\_in} wird von keiner weiteren Tabelle referenziert.
+	\item \texttt{setlist, song} $\rightarrow $\texttt{part\_of}: \texttt{part\_of} wird von keiner weiteren Tabele referenziert.
+	\item \texttt{album} $\rightarrow$ \texttt{song}: Löschen in \texttt{song} löst ein Löschen in \texttt{part\_of} auf, welches von keiner weiteren Tabelle referenziert wird.
+	\item \texttt{artist, album, music\_label} $\rightarrow$ \texttt{releases}: \texttt{releases} wird von keiner weiteren Tabelle referenziert.
+\end{enumerate}
+
+Somit existiert nirgends ein Zyklus aus Cascades, ungewolltes Verhalten kann also in dieser Hinsicht ausgeschlossen werden.
 
 \end{document}
