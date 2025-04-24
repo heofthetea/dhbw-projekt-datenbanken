@@ -94,7 +94,7 @@ Da Künstler, Veranstalter und Label jeweils Zugang auf die Plattform haben müs
 \relation{Setlist}{\underline{Setlist\_ID}}
 \relation{Plays\_In}{\dashuline{\underline{Artist\_ID}},\ \dashuline{\underline{Tour\_ID}}, \dashuline{\underline{Setlist\_ID}},\ Position}
 \relation{Song}{\underline{Song\_ID},\ \dashuline{\underline{Album\_ID}},\ Name,\ \dashuline{Setlist\_ID}}
-\relation{Album}{\underline{Album\_ID},\ Name,\ Released, Label\_Name}
+\relation{Album}{\underline{Album\_ID},\ Name,\ Released, \dashuline{Label\_Name}}
 \relation{Label}{\underline{Name},\ \dashuline{Address},\ \dashuline{User\_ID}}
 \relation{Releases}{\dashuline{\underline{Artist\_ID}},\ \dashuline{\underline{Album\_ID}}, \dashuline{{Label\_Name}}, Label\_Fee}
 \relation{Organizer}{\underline{Name},\ \dashuline{Address},\ \dashuline{User\_ID}}
@@ -148,9 +148,12 @@ Name, Address & Venue\_ID & \checkmark & \checkmark \\ \hline
 \end{table}
 
 Da für jede Funktionale Abhhängigkeit $f \in F$ gilt, dass die Domäne von $f$ ein Superschlüssel ist, oder die Bildmenge ein Primattribut, ist die Relation in 3NF.
-\end{document}
 
-
-
+\newpage
 \section{Datenbankschema}
+Korrekturen, die für diesen Teil am ERM vorgenommen wurden:
+\begin{itemize}
+	\item Beziehung "Song kombiniert zu Setlist" wurde von einer 1-N Beziehung in eine N-M Beziehung transformiert. Dies ist ein Ergebnis dessen, dass Löschregeln sonst semantisch nicht sinnvol definiert werden könnten.
+\end{itemize}
 
+\end{document}

@@ -21,14 +21,15 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: dhbw.heofthetea@gmail.com
       PGADMIN_DEFAULT_PASSWORD: password
-#    volumes:
-      # - pgadmin-data:/var/lib/pgadmin
-#      - ./pgadmin_data:/var/lib/pgadmin/storage/dhbw.heofthetea_gmail.com
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./scripts:/var/lib/pgadmin/storage/dhbw.heofthetea_gmail.com/scripts
     networks:
       - dhbw-datenbanken
 
 volumes:
   local_pgdata:
   pgadmin-data:
+    name: pgadmin-data
 networks:
   dhbw-datenbanken:
