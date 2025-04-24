@@ -19,7 +19,7 @@ create table if not exists ticket (
     ticket_nr bigint,
     price decimal(8, 2) not null,
     seat_nr int,
-    user_id bigint not null,
+    user_id bigint,
     event_id bigint not null,
 
     primary key (ticket_nr)
@@ -61,9 +61,9 @@ create table if not exists artist (
     artist_id bigint,
     name varchar(128) not null,
     genre varchar(64),
-    label_name varchar(128) not null,
+    label_name varchar(128),
     contract_end date,
-    user_id bigint not null,
+    user_id bigint,
 
     primary key (artist_id),
     check (contract_end > now() or contract_end is null) -- don't create artists with expired contracts
@@ -113,7 +113,7 @@ create table if not exists album (
 create table if not exists music_label (
     name varchar(128),
     address bigint not null,
-    user_id bigint not null,
+    user_id bigint,
 
     primary key (name)
 );
@@ -130,7 +130,7 @@ create table if not exists releases (
 create table if not exists organizer (
     name varchar(128),
     address bigint not null,
-    user_id bigint not null,
+    user_id bigint,
 
     primary key (name)
 );
@@ -155,14 +155,14 @@ alter table ticket
     add foreign key (event_id) references event on delete cascade;
 
 alter table event
-    add foreign key (venue_id) references venue on delete set null,
+    add foreign key (venue_id) references venue on delete restrict,
     add foreign key (tour_id) references tour on delete restrict;
 
 alter table venue
     add foreign key (address) references address on delete restrict;
 
 alter table tour
-    add foreign key (organizer_id) references organizer on delete set null;
+    add foreign key (organizer_id) references organizer on delete restrict;
 
 
 alter table artist
