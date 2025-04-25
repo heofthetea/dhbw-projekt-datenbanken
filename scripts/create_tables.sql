@@ -1,9 +1,6 @@
 -- Active: 1743599450736@@127.0.0.1@5432@ticketsystem
 
 
-
-
-
 create table if not exists ticket_user ( -- postgres doesn't allow to name a table "user"
     user_id bigint,
     first_name varchar(32) not null,
@@ -28,8 +25,8 @@ create table if not exists ticket (
 
 create table if not exists event (
     event_id bigint,
-    begin timestamp not null,
-    doors timestamp not null,
+    begin varchar(5) not null, -- format: HH:MM (I'm not bothering figuring out how to use timestamps correctly)
+    doors varchar(5) not null,
     date date not null,
     venue_id bigint not null,
     tour_id bigint not null,
@@ -51,7 +48,7 @@ create table if not exists venue (
 create table if not exists tour (
     tour_id bigint,
     name varchar(128) not null,
-    organizer_id varchar(128) not null,
+    organizer varchar(128) not null,
     percentage decimal(5, 2),
 
     primary key (tour_id)
@@ -95,6 +92,7 @@ create table if not exists part_of (
 create table if not exists song (
     song_id bigint,
     album_id bigint not null,
+    position int not null,
     name varchar(128) not null,
     setlist_id bigint,
 
@@ -104,8 +102,6 @@ create table if not exists song (
 create table if not exists album (
     album_id bigint,
     name varchar(128) not null,
-    released date,
-    label_name varchar(128) not null,
 
     primary key (album_id)
 );
@@ -121,7 +117,8 @@ create table if not exists music_label (
 create table if not exists releases (
     artist_id bigint not null,
     album_id bigint not null,
-    label_name varchar(128) not null,
+    label_name varchar(128),
+    released date,
     label_fee decimal(8, 2),
 
     primary key (artist_id, album_id)
@@ -162,7 +159,7 @@ alter table venue
     add foreign key (address) references address on delete restrict;
 
 alter table tour
-    add foreign key (organizer_id) references organizer on delete restrict;
+    add foreign key (organizer) references organizer on delete restrict;
 
 
 alter table artist
