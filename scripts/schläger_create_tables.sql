@@ -148,49 +148,49 @@ create table if not exists address (
 -- define foreign key constraints
 
 alter table ticket
-    add foreign key (user_id) references ticket_user on delete set null,
-    add foreign key (event_id) references event on delete cascade;
+    add foreign key (user_id) references ticket_user on delete set null on update cascade,
+    add foreign key (event_id) references event on delete cascade on update cascade;
 
 alter table event
-    add foreign key (venue_id) references venue on delete restrict,
-    add foreign key (tour_id) references tour on delete restrict;
+    add foreign key (venue_id) references venue on delete restrict on update cascade,
+    add foreign key (tour_id) references tour on delete restrict on update cascade;
 
 alter table venue
-    add foreign key (address) references address on delete restrict;
+    add foreign key (address) references address on delete restrict on update cascade;
 
 alter table tour
-    add foreign key (organizer) references organizer on delete restrict;
+    add foreign key (organizer) references organizer on delete restrict on update cascade;
 
 
 alter table artist
-    add foreign key (user_id) references ticket_user on delete set null,
-    add foreign key (label_name) references music_label on delete restrict;
+    add foreign key (user_id) references ticket_user on delete set null on update cascade,
+    add foreign key (label_name) references music_label on delete restrict on update cascade;
 
 -- relationship relation -> if any reference gets deleted, any existing relationship tuple is deleted too
 alter table plays_in
-    add foreign key (artist_id) references artist on delete cascade,
-    add foreign key (tour_id) references tour on delete cascade,
-    add foreign key (setlist_id) references setlist on delete cascade;
+    add foreign key (artist_id) references artist on delete cascade on update cascade,
+    add foreign key (tour_id) references tour on delete cascade on update cascade,
+    add foreign key (setlist_id) references setlist on delete cascade on update cascade;
 
 alter table part_of
     add column if not exists album_id bigint,
-    add foreign key (setlist_id) references setlist on delete cascade,
-    add foreign key (song_id, album_id) references song on delete cascade;
+    add foreign key (setlist_id) references setlist on delete cascade on update cascade,
+    add foreign key (song_id, album_id) references song on delete cascade on update cascade;
 
 alter table song
-    add foreign key (album_id) references album on delete cascade;
+    add foreign key (album_id) references album on delete cascade on update cascade;
 
 alter table music_label
-    add foreign key (user_id) references ticket_user on delete set null,
-    add foreign key (address) references address on delete restrict;
+    add foreign key (user_id) references ticket_user on delete set null on update cascade,
+    add foreign key (address) references address on delete restrict on update cascade;
 
 alter table releases
-    add foreign key (artist_id) references artist on delete cascade,
-    add foreign key (album_id) references album on delete cascade,
-    add foreign key (label_name) references music_label on delete cascade;
+    add foreign key (artist_id) references artist on delete cascade on update cascade,
+    add foreign key (album_id) references album on delete cascade on update cascade,
+    add foreign key (label_name) references music_label on delete cascade on update cascade;
 
 alter table organizer
-    add foreign key (user_id) references ticket_user on delete set null,
-    add foreign key (address) references address on delete restrict;
+    add foreign key (user_id) references ticket_user on delete set null on update cascade,
+    add foreign key (address) references address on delete restrict on update cascade;
 
 

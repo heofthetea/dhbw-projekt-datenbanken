@@ -75,8 +75,7 @@ values
 (15, 'As if it never was', 5, 3),
 (16, '5000', 4, 3),
 (17, 'Rising up', 4, 1),
-(18, 'Phobon Nika', 2, 7)
-;
+(18, 'Phobon Nika', 2, 7);
 
 
 insert into tour (tour_id, name, organizer, percentage)
